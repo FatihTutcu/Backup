@@ -1,0 +1,163 @@
+
+Building configuration...
+
+Current configuration : 2248 bytes
+!
+upgrade fpd auto
+version 15.3
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+aqm-register-fnf
+!
+enable secret 5 $1$rbzd$V19GmcdBbt6tcWyKH.Swr/
+enable password 1234
+!
+no aaa new-model
+!
+!
+!
+!
+ip dhcp pool VLAN21
+ network 192.168.21.0 255.255.255.0
+ default-router 192.168.21.1 
+ dns-server 8.8.8.8 8.8.4.4 
+ lease 7
+!
+!
+!
+ip domain name yourdomain.com
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+username r2 privilege 15 secret 5 $1$arls$AGzEwZ3UF1ZDrf5gnG/Fz1
+!
+redundancy
+!
+!
+ip ssh version 2
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Ethernet0/0
+ no ip address
+ shutdown
+ duplex auto
+!
+interface GigabitEthernet0/0
+ ip address 192.168.10.2 255.255.255.0
+ duplex full
+ speed 1000
+ media-type gbic
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ ip address 192.168.20.1 255.255.255.0
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ ip address 192.168.21.1 255.255.255.0
+ negotiation auto
+ no mop enabled
+!
+interface GigabitEthernet3/0
+ ip address 192.168.22.1 255.255.255.0
+ negotiation auto
+!
+interface GigabitEthernet4/0
+ ip address 192.168.23.1 255.255.255.0
+ negotiation auto
+!
+interface FastEthernet5/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet5/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet6/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+interface FastEthernet6/1
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+!
+router ospf 1
+ router-id 2.2.2.2
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+ network 192.168.21.0 0.0.0.255 area 0
+ network 192.168.22.0 0.0.0.255 area 0
+ network 192.168.23.0 0.0.0.255 area 0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+!
+ip route 0.0.0.0 0.0.0.0 192.168.22.2
+!
+!
+snmp-server community R2 RO
+!
+!
+control-plane
+!
+!
+mgcp behavior rsip-range tgcp-only
+mgcp behavior comedia-role none
+mgcp behavior comedia-check-media-src disable
+mgcp behavior comedia-sdp-force disable
+!
+mgcp profile default
+!
+!
+!
+gatekeeper
+ shutdown
+!
+!
+line con 0
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ password 1234
+ login local
+ transport input ssh
+!
+!
+end
